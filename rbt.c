@@ -168,3 +168,22 @@ int rbt_add(struct rbt * rbt, void * key, void * value) {
 
     return 0;
 }
+
+void * rbt_search(struct rbt * rbt, void * key) {
+    int n;
+    int c;
+
+    n = rbt->root;
+    while(n) {
+        c = rbt->compare(key, rbt->node[n].key);
+        if(c < 0) {
+            n = rbt->node[n].left;
+        } else if(c > 0) {
+            n = rbt->node[n].right;
+        } else {
+            return rbt->node[n].value;
+        }
+    }
+
+    return NULL;
+}
