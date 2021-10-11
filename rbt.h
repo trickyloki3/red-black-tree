@@ -1,7 +1,7 @@
 #ifndef rbt_h
 #define rbt_h
 
-typedef int (* rbt_compare) (void *, void *);
+typedef int (* rbt_compare) (const void *, const void *);
 
 struct rbt_node {
     void * key;
