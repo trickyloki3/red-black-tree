@@ -80,3 +80,47 @@ static inline void right_rotate(struct rbt * rbt, int x, int y) {
     rbt->node[y].right = x;
     rbt->node[x].parent = y;
 }
+
+int rbt_add(struct rbt * rbt, void * key, void * value) {
+    int p;
+    int n;
+    int c;
+
+    p = 0;
+    n = rbt->root;
+    while(n) {
+        p = n;
+        c = rbt->compare(key, rbt->node[n].key);
+        if(c < 0) {
+            n = rbt->node[n].left;
+        } else if(c > 0) {
+            n = rbt->node[n].right;
+        } else {
+            return panic("duplicate key");
+        }
+    }
+
+    if(rbt->next >= rbt->size)
+        return panic("out of memory");
+
+    n = rbt->next++;
+
+    rbt->node[n].key = key;
+    rbt->node[n].value = value;
+    rbt->node[n].color = red;
+    rbt->node[n].left = 0;
+    rbt->node[n].right = 0;
+    rbt->node[n].parent = p;
+
+    if(p) {
+        if(c < 0) {
+            rbt->node[p].left = n;
+        } else {
+            rbt->node[p].right = n;
+        }
+    } else {
+        rbt->root = n;
+    }
+
+    return 0;
+}
