@@ -86,6 +86,9 @@ int rbt_add(struct rbt * rbt, void * key, void * value) {
     int n;
     int c;
 
+    int g;
+    int s;
+
     p = 0;
     n = rbt->root;
     while(n) {
@@ -121,6 +124,47 @@ int rbt_add(struct rbt * rbt, void * key, void * value) {
     } else {
         rbt->root = n;
     }
+
+    while(rbt->node[p].color == red) {
+        g = rbt->node[p].parent;
+        if(rbt->node[g].left == p) {
+            s = rbt->node[g].right;
+            if(rbt->node[s].color == red) {
+                rbt->node[p].color = black;
+                rbt->node[g].color = red;
+                rbt->node[s].color = black;
+                n = g;
+                p = rbt->node[g].parent;
+            } else {
+                if(rbt->node[p].right == n) {
+                    left_rotate(rbt, p, n);
+                    p = n;
+                }
+                rbt->node[p].color = black;
+                rbt->node[g].color = red;
+                right_rotate(rbt, g, p);
+            }
+        } else {
+            s = rbt->node[g].left;
+            if(rbt->node[s].color == red) {
+                rbt->node[p].color = black;
+                rbt->node[g].color = red;
+                rbt->node[s].color = black;
+                n = g;
+                p = rbt->node[g].parent;
+            } else {
+                if(rbt->node[p].left == n) {
+                    right_rotate(rbt, p, n);
+                    p = n;
+                }
+                rbt->node[p].color = black;
+                rbt->node[g].color = red;
+                left_rotate(rbt, g, p);
+            }
+        }
+    }
+
+    rbt->node[rbt->root].color = black;
 
     return 0;
 }
