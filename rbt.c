@@ -169,6 +169,28 @@ int rbt_add(struct rbt * rbt, void * key, void * value) {
     return 0;
 }
 
+int rbt_remove(struct rbt * rbt, void * key) {
+    int x;
+    int c;
+
+    x = rbt->root;
+    while(x) {
+        c = rbt->compare(key, rbt->node[x].key);
+        if(c < 0) {
+            x = rbt->node[x].left;
+        } else if(c > 0) {
+            x = rbt->node[x].right;
+        } else {
+            break;
+        }
+    }
+
+    if(x == 0)
+        return panic("invalid key");
+
+    return 0;
+}
+
 void * rbt_search(struct rbt * rbt, void * key) {
     int n;
     int c;

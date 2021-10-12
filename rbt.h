@@ -23,6 +23,7 @@ struct rbt {
 int rbt_create(struct rbt *, int, rbt_compare);
 void rbt_delete(struct rbt *);
 int rbt_add(struct rbt *, void *, void *);
+int rbt_remove(struct rbt *, void *);
 void * rbt_search(struct rbt *, void *);
 
 #endif
