@@ -17,7 +17,7 @@ static inline void right_rotate(struct rbt *, int, int);
 
 int rbt_create(struct rbt * rbt, int size, rbt_compare compare) {
     rbt->node = malloc(size * sizeof(*rbt->node));
-    if(!rbt->node)
+    if(rbt->node == NULL)
         return panic("out of memory");
 
     rbt->root = 0;
