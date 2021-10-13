@@ -173,6 +173,8 @@ int rbt_remove(struct rbt * rbt, void * key) {
     int x;
     int c;
 
+    int n;
+
     x = rbt->root;
     while(x) {
         c = rbt->compare(key, rbt->node[x].key);
@@ -187,6 +189,21 @@ int rbt_remove(struct rbt * rbt, void * key) {
 
     if(x == 0)
         return panic("invalid key");
+
+    if(rbt->node[x].left && rbt->node[x].right) {
+        n = rbt->node[x].right;
+        while(rbt->node[n].left)
+            n = rbt->node[n].left;
+
+        rbt->node[x].key = rbt->node[n].key;
+        rbt->node[x].value = rbt->node[n].value;
+
+        x = n;
+    }
+
+    n = rbt->node[x].left ? rbt->node[x].left : rbt->node[x].right;
+
+    change_heir(rbt, x, n);
 
     return 0;
 }
