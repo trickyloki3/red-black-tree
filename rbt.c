@@ -174,6 +174,11 @@ int rbt_remove(struct rbt * rbt, void * key) {
     int c;
 
     int n;
+    int p;
+    int s;
+
+    int l;
+    int r;
 
     x = rbt->root;
     while(x) {
@@ -204,6 +209,74 @@ int rbt_remove(struct rbt * rbt, void * key) {
     n = rbt->node[x].left ? rbt->node[x].left : rbt->node[x].right;
 
     replace_node(rbt, x, n);
+
+    if(rbt->node[x].color == black) {
+        while(n != rbt->root && rbt->node[n].color == black) {
+            p = rbt->node[n].parent;
+            if(rbt->node[p].left == n) {
+                s = rbt->node[p].right;
+
+                if(rbt->node[s].color == red) {
+                    rbt->node[s].color = black;
+                    rbt->node[p].color = red;
+                    left_rotate(rbt, p, s);
+                    s = rbt->node[p].right;
+                }
+
+                l = rbt->node[s].left;
+                r = rbt->node[s].right;
+
+                if(rbt->node[l].color == black && rbt->node[r].color == black) {
+                    rbt->node[s].color = red;
+                    n = p;
+                } else {
+                    if(rbt->node[r].color == black) {
+                        rbt->node[s].color = red;
+                        rbt->node[l].color = black;
+                        right_rotate(rbt, s, l);
+                        r = s;
+                        s = l;
+                    }
+                    rbt->node[s].color = rbt->node[p].color;
+                    rbt->node[r].color = black;
+                    rbt->node[p].color = black;
+                    left_rotate(rbt, p, s);
+                    n = rbt->root;
+                }
+            } else {
+                s = rbt->node[p].left;
+
+                if(rbt->node[s].color == red) {
+                    rbt->node[s].color = black;
+                    rbt->node[p].color = red;
+                    right_rotate(rbt, p, s);
+                    s = rbt->node[p].left;
+                }
+
+                l = rbt->node[s].left;
+                r = rbt->node[s].right;
+
+                if(rbt->node[l].color == black && rbt->node[r].color == black) {
+                    rbt->node[s].color = red;
+                    n = p;
+                } else {
+                    if(rbt->node[l].color == black) {
+                        rbt->node[s].color = red;
+                        rbt->node[r].color = black;
+                        left_rotate(rbt, s, r);
+                        l = s;
+                        s = r;
+                    }
+                    rbt->node[s].color = rbt->node[p].color;
+                    rbt->node[l].color = black;
+                    rbt->node[p].color = black;
+                    right_rotate(rbt, p, s);
+                    n = rbt->root;
+                }
+            }
+        }
+        rbt->node[n].color = black;
+    }
 
     return 0;
 }
