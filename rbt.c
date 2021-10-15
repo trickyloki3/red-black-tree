@@ -11,7 +11,7 @@ enum {
     black
 };
 
-static inline void change_heir(struct rbt *, int, int);
+static inline void replace_node(struct rbt *, int, int);
 static inline void left_rotate(struct rbt *, int, int);
 static inline void right_rotate(struct rbt *, int, int);
 
@@ -39,7 +39,7 @@ void rbt_delete(struct rbt * rbt) {
     free(rbt->node);
 }
 
-static inline void change_heir(struct rbt * rbt, int x, int y) {
+static inline void replace_node(struct rbt * rbt, int x, int y) {
     int i;
 
     i = rbt->node[x].parent;
@@ -62,7 +62,7 @@ static inline void left_rotate(struct rbt * rbt, int x, int y) {
     rbt->node[x].right = i;
     rbt->node[i].parent = x;
 
-    change_heir(rbt, x, y);
+    replace_node(rbt, x, y);
 
     rbt->node[y].left = x;
     rbt->node[x].parent = y;
@@ -75,7 +75,7 @@ static inline void right_rotate(struct rbt * rbt, int x, int y) {
     rbt->node[x].left = i;
     rbt->node[i].parent = x;
 
-    change_heir(rbt, x, y);
+    replace_node(rbt, x, y);
 
     rbt->node[y].right = x;
     rbt->node[x].parent = y;
@@ -203,7 +203,7 @@ int rbt_remove(struct rbt * rbt, void * key) {
 
     n = rbt->node[x].left ? rbt->node[x].left : rbt->node[x].right;
 
-    change_heir(rbt, x, n);
+    replace_node(rbt, x, n);
 
     return 0;
 }
