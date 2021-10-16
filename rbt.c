@@ -39,6 +39,11 @@ void rbt_delete(struct rbt * rbt) {
     free(rbt->node);
 }
 
+void rbt_clear(struct rbt * rbt) {
+    rbt->root = 0;
+    rbt->next = 1;
+}
+
 static inline void replace_node(struct rbt * rbt, int x, int y) {
     int i;
 
