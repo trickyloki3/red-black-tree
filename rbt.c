@@ -278,6 +278,20 @@ int rbt_remove(struct rbt * rbt, void * key) {
         rbt->node[n].color = black;
     }
 
+    n = --rbt->next;
+
+    if(x != n) {
+        rbt->node[x] = rbt->node[n];
+
+        l = rbt->node[x].left;
+        rbt->node[l].parent = x;
+
+        r = rbt->node[x].right;
+        rbt->node[r].parent = x;
+
+        replace_node(rbt, n, x);
+    }
+
     return 0;
 }
 
