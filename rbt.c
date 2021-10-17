@@ -300,7 +300,7 @@ int rbt_remove(struct rbt * rbt, void * key) {
     return 0;
 }
 
-void * rbt_search(struct rbt * rbt, void * key) {
+void * rbt_find(struct rbt * rbt, void * key) {
     int n;
     int c;
 
