@@ -318,3 +318,30 @@ void * rbt_search(struct rbt * rbt, void * key) {
 
     return NULL;
 }
+
+void rbt_traverse(struct rbt * rbt, rbt_handler handler, void * payload) {
+    int n;
+    int p;
+
+    n = rbt->root;
+    while(rbt->node[n].left)
+        n = rbt->node[n].left;
+
+    while(n) {
+        if(handler(rbt->node[n].key, rbt->node[n].value, payload))
+            break;
+
+        if(rbt->node[n].right) {
+            n = rbt->node[n].right;
+            while(rbt->node[n].left)
+                n = rbt->node[n].left;
+        } else {
+            p = rbt->node[n].parent;
+            while(rbt->node[p].right == n) {
+                n = p;
+                p = rbt->node[n].parent;
+            }
+            n = p;
+        }
+    }
+}

@@ -27,4 +27,8 @@ int rbt_add(struct rbt *, void *, void *);
 int rbt_remove(struct rbt *, void *);
 void * rbt_search(struct rbt *, void *);
 
+typedef int (* rbt_handler) (const void *, const void *, void *);
+
+void rbt_traverse(struct rbt *, rbt_handler, void *);
+
 #endif
